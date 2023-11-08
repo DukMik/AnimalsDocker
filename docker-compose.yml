@@ -1,0 +1,41 @@
+networks:
+  animals-nwk: {}
+
+services: 
+  animal-mysql: 
+    image: mysql    
+    environment:
+      - MYSQL_RANDOM_ROOT_PASSWORD=1
+      - MYSQL_DATABASE=WPDataBase
+      - MYSQL_USER=fabien
+      - MYSQL_PASSWORD=pass
+    networks: 
+      -  animals-nwk
+    ports:
+      - 3306:3306
+    # secrets:
+    #   - db-password
+
+
+  animal-app:
+    image: animalls:0.2
+    environment:
+      - DB_HOST=animal-mysql
+      - DB_NAME=WPDataBase
+      - DB_USER=fabien
+      - DB_PORT=3306   
+      - DB_PASSWORD=pass
+      - PORT=2525 
+    networks: 
+     - animals-nwk
+    # ports:
+    #   - "9898:80"
+    restart: on-failure
+    depends_on: 
+      - animal-mysql
+    ports:
+      - 2525:2525
+        
+
+    # secrets:
+    #   - db-password

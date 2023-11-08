@@ -2,20 +2,22 @@ const express = require("express");
 const { Sequelize, DataTypes } = require("sequelize");
 
 
-
 const sequelize = new Sequelize(
-  process.env.DB_NAME,
-  process.env.DB_USER,
-  process.env.DB_PASSWORD,
+  // process.env.DB_NAME,
+  // process.env.DB_USER,
+  // process.env.DB_PASSWORD,
+  "WPDataBase",
+  "fabien",
+  "pass",
   {
-    host: process.env.DB_HOST,
-    port: process.env.DB_PORT || 3306,
+    host: animal-mysql,
+    port: 2525,
     dialect: "mysql",
   }
 );
 
 // mapping de table de bdd vers javascript 
-const Jeux = sequelize.define("Jeux", {
+const Animals = sequelize.define("Animals", {
   id: {
     type: DataTypes.INTEGER,
     primaryKey: true,
@@ -27,23 +29,23 @@ const Jeux = sequelize.define("Jeux", {
   try {
     await sequelize.authenticate();
     console.log("Connection has been established successfully.");
-    await Jeux.sync();
-    await Jeux.findOrCreate({
+    await Animals.sync();
+    await Animals.findOrCreate({
       where: { id: 1 },
       defaults: {
-        nom: "Elden Ring",
+        nom: "Deepstaria enigmatica (Méduse)",
       },
     });
-    await Jeux.findOrCreate({
+    await Animals.findOrCreate({
       where: { id: 2 },
       defaults: {
-        nom: "Stellaris",
+        nom: "Lybia tessellata (Crabe)",
       },
     });
-    await Jeux.findOrCreate({
+    await Animals.findOrCreate({
       where: { id: 3 },
       defaults: {
-        nom: "Superman 64",
+        nom: "Isistius brasiliensis (Requin)",
       },
     });
     console.log("Database initialized successfully.");
@@ -53,10 +55,10 @@ const Jeux = sequelize.define("Jeux", {
 })();
 
 const app = express();
-const port = process.env.PORT || 3000;
+const port = 2525;
 
 app.get("/", (req, res) => {
-  Jeux.findAll().then(r => res.send(r));
+  Animals.findAll().then(r => res.send(r));
 });
 
 app.listen(port, () => {
